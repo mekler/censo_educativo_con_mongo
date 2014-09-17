@@ -19,6 +19,8 @@ with open(sys.argv[3], 'wb') as csvfile:
 		quotechar='"', quoting=csv.QUOTE_MINIMAL)
 	for post in collection.find():
 		if 'edo_en_mapa' in post:
+			if post['num_grupos']=='':
+				post['num_grupos'] = '0'
 			if 'infraestructura' in post:
 				renglon = [post['edo_en_mapa'],\
 				post['num_alumnos'],\
@@ -45,8 +47,9 @@ with open(sys.argv[3], 'wb') as csvfile:
 				post['numero_dir'],\
 				post['num_personal'],\
 				post['municipio'],\
-				post['cct'],\
+				post['cct'][0:10],\
 				post['calle'],\
+				post['id_turno'][-1],\
 				post['turno'],\
 				post['infraestructura']['Servicio de internet'],\
 				post['infraestructura']['Programa Escuela Siempre Abierta'],\
@@ -127,8 +130,9 @@ with open(sys.argv[3], 'wb') as csvfile:
 				post['numero_dir'],\
 				post['num_personal'],\
 				post['municipio'],\
-				post['cct'],\
+				post['cct'][0:10],\
 				post['calle'],\
+				post['id_turno'][-1],\
 				post['turno']]
 		else:
 			renglon = [	post['edo'],\
@@ -144,15 +148,12 @@ with open(sys.argv[3], 'wb') as csvfile:
 				renglon[i] = renglon[i].encode('utf-8')
 			except:
 				renglon[i] = ''
-		if k != 78:
-			if post['cct'] == '07DPB2042B1':
-				print len(renglon),'07DPB2042B1', post
-				sys.exit()
-			if k == 28:
-				for i in range (k,78):
+		if k != 79:
+			if k == 29:
+				for i in range (k,79):
 					renglon.append('')
 			else:
 				print "renglon:" +str(k)
 				print len(post), len(renglon)
 				sys.exit()
-		#spamwriter.writerow(renglon)
+		spamwriter.writerow(renglon)
